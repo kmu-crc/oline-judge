@@ -1,0 +1,18 @@
+Django>=3.0.8,<3.1.99
+django-cors-headers>=3.4.0,<4.0.0
+djangorestframework>=3.11.0,<4.0.0
+djangorestframework-jsonapi[django-polymorphic]>=3.1.0,<4.0.0
+djangorestframework-recursive
+djangorestframework-jwt>=1.11.0,<2.0.0
+drf-yasg>=1.17.1,<2.0.0
+drf-yasg-json-api>=0.7.1,<1.0.0
+drf-yasg-stubs>=0.1.0,<1.0.0
+drf-nested-routers>=0.91,<1.0.0
+requests>=2.20.1,<2.21
+django-filter>=2.3.0,<3.0.0
+django-filter-stubs>=0.1.1,<1.0.0
+
+# Batch Celery
+celery[sqs]
+django-celery-beat
+pycurl

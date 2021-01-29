@@ -61,6 +61,7 @@ class GetProblemViewSet(mx.ListModelMixin,
     + language_id - 언어 ID => 특정 언어에 한정된 문제인 경우에만 작성,
     + name - 문제이름,
     + contents - 문제 pdf 파일 경로 => 추후 텍스트 작성 가능,
+    + template - 템플릿 코드,
     + time - 제한시간(ms)
     + memory - 제한메모리(MB)
     + problem_type - 문제타입 => [S,C,F]

@@ -10,6 +10,7 @@ from grader import models
 
 from grader.tasks.grade_celery import grade_code, check_task_order
 
+
 @method_decorator(name='create', decorator=swagger_auto_schema(
     operation_description="""
     제출된 코드의 채점 요청.
@@ -35,7 +36,12 @@ class SubmitViewSet(mx.CreateModelMixin,
         serializer.is_valid(raise_exception=True)
         data = serializer.validated_data
 
-        instance = models.SubmitLog.objects.create(**data)
+        instance = models.SubmitLog.objects.create(**{
+            'submit_id': data['submit_id'],
+            'problem_id': data['problem_id'],
+            'language_id': data['language_id'],
+            'code': data['submitlog_code'][0],
+        })
         data.setdefault('log_id', instance.id)
 
         order = check_task_order()

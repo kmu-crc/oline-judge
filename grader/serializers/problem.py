@@ -35,7 +35,7 @@ class ProblemCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Problem
-        fields = ['id', 'language_id', 'name', 'contents', 'time', 'memory', 'problem_type',
+        fields = ['id', 'language_id', 'name', 'contents', 'template', 'time', 'memory', 'problem_type',
                   'testcase', 'checker', 'categories']
 
 

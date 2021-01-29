@@ -7,8 +7,8 @@ from grade_core.utils import safety_file_open
 from grade_core.message import PROBLEM_ERROR, SEVER_ERROR
 
 
-BASE_URL = ''
-PLATFORM_URL =  ''
+BASE_URL = 'http://203.246.113.171:8080'
+PLATFORM_URL =  'https://https.opensrcdesign.com'
 
 
 def send_result(result, avg_time, avg_mem, message, log_id, submit_id):
@@ -41,7 +41,8 @@ def grade(grading_info):
         if grading_info['problem_type'] != 'F':
             code_compile = Compile()
             if not code_compile(grading_info['extension'], grading_info['compile_path'],
-                                grading_info['compile_command'], grading_info['submit_code']):
+                                grading_info['compile_command'], grading_info['submit_code'],
+                                grading_info['file_name']):
                 _, msg = safety_file_open('error.err')
                 send_result('C', 0, 0, ''.join(msg), grading_info['log_id'], grading_info['submit_id'])
                 return
@@ -69,6 +70,7 @@ def grade(grading_info):
 
 
 if __name__ == '__main__':
+    # with open('/home/algorithm/grade/backend/grader/tasks/json_data_volume/matchdata.json') as json_file:
     with open('/grading_info.json') as json_file:
         grading_info = json.load(json_file)
     grade(grading_info)

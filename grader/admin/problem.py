@@ -8,7 +8,7 @@ class ProblemAdmin(admin.ModelAdmin):
     """
     문제 관리
     """
-    list_display = ['language', 'name', 'contents', 'time', 'memory', 'problem_type']
+    list_display = ['language', 'name', 'contents', 'time', 'memory', 'problem_type', 'template']
     filter_horizontal = ['categories',]
     list_filter = ['language', 'name', 'problem_type']
     search_fields = ['language', 'name', 'problem_type']

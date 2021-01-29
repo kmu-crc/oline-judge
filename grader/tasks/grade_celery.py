@@ -15,14 +15,16 @@ logger = logging.getLogger(__name__)
 
 
 @app.task(name='grade_code')
-def grade_code(log_id, problem_id, submit_id, code, language_id):
+def grade_code(log_id, problem_id, submit_id, submitlog_code, file_name, language_id):
     mode = 'develop'
     docker_img = 'core'
     volume_path = os.path.join(os.getcwd(), 'grader', 'tasks', 'json_data_volume')
 
     try:
         print('### Data Setting ###')
-        grading_info = models.Problem.objects.filter(
+        grading_info = models.Problem.objects.prefetch_related(
+            'checker__language',
+        ).filter(
             id=problem_id,
         ).values(
             'problem_type',
@@ -53,7 +55,8 @@ def grade_code(log_id, problem_id, submit_id, code, language_id):
         )
         grading_info['testcase'] = testcase
 
-        grading_info['submit_code'] = code
+        grading_info['submit_code'] = submitlog_code
+        grading_info['file_name'] = file_name
         grading_info['submit_id'] = submit_id
         grading_info['log_id'] = log_id
         print('### End Setting ###')
@@ -64,6 +67,7 @@ def grade_code(log_id, problem_id, submit_id, code, language_id):
         # with open(data_file_path, 'w') as fp:
         #     json.dump(grading_info, fp)
         # os.system('python3 /home/algorithm/grade/backend/grader/tasks/run_grade.py')
+        # return
         #########################
 
         ###############################

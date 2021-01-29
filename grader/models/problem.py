@@ -38,6 +38,13 @@ class Problem(models.Model):
         db_column='CTS',
     )
 
+    template = models.TextField(
+        verbose_name=_('템플릿 코드'),
+        db_column='TEMP',
+        null=True,
+        blank=True,
+    )
+
     time = models.PositiveSmallIntegerField(
         verbose_name=_('제한시간(ms)'),
         db_column='TIME',

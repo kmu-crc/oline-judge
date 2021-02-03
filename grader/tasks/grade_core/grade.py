@@ -42,8 +42,7 @@ class Grade(Execution):
 
         # run submit code < enter input testcase
         for case in grading_info['testcase']:
-            if case[0]:
-                safety_file_write(input_file_name, case[0])
+            safety_file_write(input_file_name, case[0])
             result, time, memory = self.execute(command, self.time, True, self.memory, input_file_name)
 
             if result == 'R':

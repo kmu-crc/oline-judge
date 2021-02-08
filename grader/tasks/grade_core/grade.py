@@ -29,7 +29,7 @@ class Grade(Execution):
         result = self.check_output(code, ans, True)
         return ('S', 0, 0, '') if result else ('F', 0, 0, '')
 
-    def grade_problem(self, grading_info):
+    def grade_problem(self, grading_info, testcase_size=10):
         command = self.make_command(grading_info['run_path'], grading_info['run_command'])
         if self.problem_type == 'C':
             checker_command = self.make_command(grading_info['checker__language__run_path'],
@@ -41,7 +41,13 @@ class Grade(Execution):
         input_file_name = '{}.in'.format(random.randrange(100, 1000))
 
         # run submit code < enter input testcase
-        for case in grading_info['testcase']:
+        testcase_cnt = 0
+        skip_size = (len(grading_info['testcase']) // testcase_size)
+        skip_size = skip_size if skip_size > 1 else skip_size + 1
+        for idx in range(0, len(grading_info['testcase']), skip_size):
+            testcase_cnt += 1
+            case = grading_info['testcase'][idx]
+
             safety_file_write(input_file_name, case[0])
             result, time, memory = self.execute(command, self.time, True, self.memory, input_file_name)
 
@@ -75,7 +81,7 @@ class Grade(Execution):
             else:
                 return 'E', 0, 0, SEVER_ERROR
 
-        return 'S', self.total_time/len(grading_info['testcase']), self.total_memory/len(grading_info['testcase']), ''
+        return 'S', self.total_time/testcase_cnt, self.total_memory/testcase_cnt, ''
 
     def make_command(self, path, run_command):
         command = run_command.split(',')

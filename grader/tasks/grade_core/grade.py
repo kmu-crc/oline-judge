@@ -42,8 +42,12 @@ class Grade(Execution):
 
         # run submit code < enter input testcase
         testcase_cnt = 0
-        skip_size = (len(grading_info['testcase']) // testcase_size)
-        skip_size = skip_size if skip_size > 1 else skip_size + 1
+        if len(grading_info['testcase']) <= int(testcase_size * 1.6):
+            skip_size = 1
+            grading_info['testcase'] = grading_info['testcase'][-testcase_size:]
+        else:
+            skip_size = len(grading_info['testcase']) // testcase_size
+            skip_size = skip_size if skip_size > 1 else skip_size + 1
         for idx in range(0, len(grading_info['testcase']), skip_size):
             testcase_cnt += 1
             case = grading_info['testcase'][idx]

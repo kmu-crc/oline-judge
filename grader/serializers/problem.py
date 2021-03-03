@@ -24,7 +24,7 @@ class CheckerSerializer(serializers.ModelSerializer):
 class ProblemSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Problem
-        fields = ['id', 'language', 'name', 'contents', 'time', 'memory', 'problem_type', 'is_open', 'categories']
+        fields = ['id', 'language', 'name', 'contents', 'time', 'memory', 'case_count', 'problem_type', 'is_open', 'categories']
         read_only_fields = ['language', 'is_open']
 
 
@@ -35,7 +35,7 @@ class ProblemCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Problem
-        fields = ['id', 'language_id', 'name', 'contents', 'template', 'time', 'memory', 'problem_type',
+        fields = ['id', 'language_id', 'name', 'contents', 'template', 'time', 'memory', 'case_count', 'problem_type',
                   'testcase', 'checker', 'categories']
 
 

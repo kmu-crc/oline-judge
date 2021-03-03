@@ -10,7 +10,6 @@ from grader import models
 
 from grader.tasks.grade_celery import grade_code, check_task_order
 
-
 @method_decorator(name='create', decorator=swagger_auto_schema(
     operation_description="""
     제출된 코드의 채점 요청.

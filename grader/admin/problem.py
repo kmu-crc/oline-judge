@@ -8,13 +8,15 @@ class ProblemAdmin(admin.ModelAdmin):
     """
     문제 관리
     """
-    list_display = ['language', 'name', 'contents', 'time', 'memory', 'problem_type', 'template']
-    filter_horizontal = ['categories',]
+    list_display = ['language', 'id', 'name', 'contents', 'time', 'memory', 'problem_type', 'template']
+    # filter_horizontal = ['categories',]
     list_filter = ['language', 'name', 'problem_type']
     search_fields = ['language', 'name', 'problem_type']
-    list_per_page = 30
+    list_per_page = 100 #30
 
     list_select_related = ['language', ]
+
+    list_editable = ['id', 'name', 'contents']
 
     class Meta:
         model = models.Problem
@@ -28,7 +30,7 @@ class TestCaseAdmin(admin.ModelAdmin):
     list_display = ['problem', 'input', 'output']
     list_filter = ['problem',]
     search_fields = ['problem',]
-    list_per_page = 30
+    list_per_page = 100 #30
 
     list_select_related = ['problem', ]
 
@@ -44,7 +46,7 @@ class CheckerAdmin(admin.ModelAdmin):
     list_display = ['problem', 'language', 'code']
     list_filter = ['problem', 'language']
     search_fields = ['problem', 'language']
-    list_per_page = 30
+    list_per_page = 100 #30
 
     list_select_related = ['problem', 'language', ]
 

@@ -1,5 +1,6 @@
 import os
 import re
+import time
 import errno
 import signal
 import subprocess
@@ -61,13 +62,17 @@ class Execution(object):
 
     @timeout(2000)
     def trace_pid(self, pid, is_program, limit_time, limit_memory):
+        limit_time /= 1000
         mem_size = 0
+        s_time = time.time()
         while True:
             wpid, status, res = os.wait4(pid, 0)
             exitCode = os.WEXITSTATUS(status)
 
             if res[0] >= limit_time:
                 return 'T', res[0], mem_size
+            if time.time() - s_time > limit_time*1.8:
+                return 'T', time.time() - s_time, mem_size
             if mem_size >= limit_memory:
                 return 'M', res[0], mem_size
 

@@ -35,7 +35,7 @@ class SubmitViewSet(mx.CreateModelMixin,
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         data = serializer.validated_data
-
+        print(data)
         instance = models.SubmitLog.objects.create(**{
             'submit_id': data['submit_id'],
             'problem_id': data['problem_id'],

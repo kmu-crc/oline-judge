@@ -7,8 +7,8 @@ from grade_core.utils import safety_file_open
 from grade_core.message import PROBLEM_ERROR, SEVER_ERROR
 
 
-BASE_URL = ''
-PLATFORM_URL =  ''
+BASE_URL = 'http://3.34.142.28:8080'
+PLATFORM_URL =  'https://https.opensrcdesign.com'
 
 
 def send_result(result, avg_time, avg_mem, message, log_id, submit_id):

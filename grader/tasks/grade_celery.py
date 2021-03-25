@@ -54,7 +54,7 @@ def grade_code(log_id, problem_id, submit_id, submitlog_code, file_name, languag
             )
         )
         grading_info['testcase'] = testcase
-
+        print(submitlog_code)
         grading_info['submit_code'] = submitlog_code
         grading_info['file_name'] = file_name
         grading_info['submit_id'] = submit_id

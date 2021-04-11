@@ -4,6 +4,7 @@ import time
 import errno
 import signal
 import subprocess
+import resource
 
 from functools import wraps
 from ptrace.binding import ptrace_traceme, ptrace_syscall, ptrace_kill
@@ -44,6 +45,11 @@ class Execution(object):
             ptrace_traceme()
             os.nice(19)
 
+            soft, hard = resource.getrlimit(resource.RLIMIT_CPU)
+            rlimTime = int(limit_time / 1000) + 1
+
+            resource.setrlimit(resource.RLIMIT_CPU, (rlimTime, hard))
+
             redirection_error = os.open('error.err', os.O_RDWR | os.O_CREAT | os.O_TRUNC)
             os.dup2(redirection_error, 2)
 
@@ -78,6 +84,9 @@ class Execution(object):
 
             if os.WIFEXITED(status):  # normal termination
                 return 'S', res[0], mem_size
+
+            if exitCode is 24:
+                return 'T', res[0], mem_size
 
             if (exitCode is not 5) and (exitCode is not 0) and (exitCode is not 17):
                 return 'R', 0, 0

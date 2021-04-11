@@ -5,12 +5,13 @@ import docker
 import random
 import logging
 import multiprocessing
+from billiard import current_process
 
 from backend.celery import app
 from .. import models
 
 
-CONTAINER_LIST = [i for i in range(1, multiprocessing.cpu_count())]
+MAX_SIZE = int((multiprocessing.cpu_count() - 1) * 1.8)
 logger = logging.getLogger(__name__)
 
 
@@ -29,6 +30,7 @@ def grade_code(log_id, problem_id, submit_id, submitlog_code, file_name, languag
         ).values(
             'problem_type',
             'time', 'memory',
+            'case_count',
             'checker__code',
             'checker__language__extension',
             'checker__language__compile_path',
@@ -71,15 +73,17 @@ def grade_code(log_id, problem_id, submit_id, submitlog_code, file_name, languag
         #########################
 
         ###############################
-        docker_name = '00'
+        worker_num = current_process().index
+        docker_name = '{}-'.format(worker_num)
         while True:
-            run_containers = get_container_list()
-            usable_containers = set(CONTAINER_LIST) - set(run_containers)
-            if usable_containers:
-                docker_name += str(usable_containers.pop())
+            run_cnt = get_container_list(worker_num)
+            if run_cnt < MAX_SIZE:
+                docker_name += '{}{}{}{}{}'.format(random.choice(['A', 'B', 'C', 'D']),
+                                                   log_id, problem_id, submit_id, language_id)
                 break
-            time.sleep(1)
+            time.sleep(0.3)
         print('### Run Grading in Container {} ###'.format(docker_name))
+
         # docker setting
         client = docker.from_env()
 
@@ -98,11 +102,11 @@ def grade_code(log_id, problem_id, submit_id, submitlog_code, file_name, languag
         try:
             if mode == 'develop':
                 client.containers.run(image=docker_img, command='python3 run_grade.py', volumes=volumes,
-                                      cpuset_cpus=docker_name, mem_limit='1g', detach=True,
+                                      mem_limit='1g', detach=True,
                                       name=docker_name, auto_remove=True, privileged=True, network_mode='host')
             else:
                 client.containers.run(image=docker_img, command='python3 run_grade.py', volumes=volumes,
-                                      cpuset_cpus=docker_name, mem_limit='1g', detach=True,
+                                      mem_limit='1g', detach=True,
                                       name=docker_name, auto_remove=True, privileged=True)
         except Exception as e:
             print(f'Fail run docker container: {e}')
@@ -111,12 +115,14 @@ def grade_code(log_id, problem_id, submit_id, submitlog_code, file_name, languag
         print(e)
         return
 
-def get_container_list():
-    c_list = []
+def get_container_list(worker_num):
+    cnt = 0
     running_containers = docker.APIClient().containers()
     for container in running_containers:
-        c_list.append(int(container['Names'][0][1:]))
-    return c_list
+        w_num = int(container['Names'][0][1:].split('-')[0])
+        if w_num == worker_num:
+            cnt += 1
+    return cnt
 
 def check_task_order():
     n = 0

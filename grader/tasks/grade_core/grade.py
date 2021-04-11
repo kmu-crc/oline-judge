@@ -29,7 +29,8 @@ class Grade(Execution):
         result = self.check_output(code, ans, True)
         return ('S', 0, 0, '') if result else ('F', 0, 0, '')
 
-    def grade_problem(self, grading_info, testcase_size=10):
+    def grade_problem(self, grading_info):
+        testcase_size = grading_info['case_count']
         command = self.make_command(grading_info['run_path'], grading_info['run_command'])
         if self.problem_type == 'C':
             checker_command = self.make_command(grading_info['checker__language__run_path'],

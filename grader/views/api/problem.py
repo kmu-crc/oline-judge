@@ -64,6 +64,7 @@ class GetProblemViewSet(mx.ListModelMixin,
     + template - 템플릿 코드,
     + time - 제한시간(ms)
     + memory - 제한메모리(MB)
+    + case_count - 채점 시 사용할 테스트케이스 개수
     + problem_type - 문제타입 => [S,C,F]
     \t+ Solution(S) - 입력에 대한 출력이 고정된 문제
     \t+ Checker(C) - 입력에 대한 출력이 고정되지 않은 문제

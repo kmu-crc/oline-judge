@@ -55,6 +55,14 @@ class Problem(models.Model):
         db_column='MRY',
     )
 
+    case_count = models.PositiveSmallIntegerField(
+        verbose_name=_('테스트케이스 개수'),
+        db_column='CCNT',
+        blank=True,
+        null=False,
+        default=10,
+    )
+
     problem_type = models.CharField(
         verbose_name=_('문제타입'),
         db_column='PTYP',
